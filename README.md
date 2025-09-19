@@ -80,57 +80,61 @@ from http_nt_pclient.rest import ApiException
 from pprint import pprint
 
 async def main():
+    """
+    Example of using GeneralApi endpoints with clean session management.
+
+    Demonstrates:
+    - Configuring the client
+    - Querying sites, exchanges, exposures, instruments, and limits
+    - Using a single try/finally to ensure session cleanup
+    """
+
     # Configure HTTP basic authorization: basicAuth
     api_instance = http_nt_pclient.GeneralApi()
     api_instance.api_client.configuration.username = 'API_KEY'
     api_instance.api_client.configuration.password = 'API_SECRET'
     api_instance.api_client.configuration.host = 'TRADER_URL'
 
+    # Parameters
+    site = 'SITE_NAME'  # Instance of Nickel Trader used for execution
+    account_id = 'ACCOUNT_ID'  # Exchange account identifier in Nickel Trader
+    exchange = 'EXCHANGE_NAME'  # Exchange code (e.g. 'BINANCE_FUTURES_USDT')
+
     try:
-        # Returns list of available Nickel Trader instances (sites)
+        # Sites
+        print('Available sites:')
         api_response = await api_instance.sites()
         pprint(api_response)
-    except ApiException as e:
-        print(f"Exception when calling GeneralApi->sites: {e}\n")
 
-    site = 'Ext-Tokyo-1'  # str | Instance of Nickel Trader used for the execution. One or more can be available. For the list of available sites, query [/v1/sites](#/General/sites).
-    account_id = 'account_id_example'  # str | An exchange account id
-    exchange = 'BINANCE_FUTURES_USDT'  # str | Exchange, see [/v1/exchanges](#/General/exchanges)
-
-    try:
-        # Returns list of available exchanges
+        # Exchanges
+        print('Available exchanges:')
         api_response = await api_instance.exchanges(site)
         pprint(api_response)
-    except ApiException as e:
-        print(f"Exception when calling GeneralApi->exchanges: {e}\n")
 
-    try:
-        # Returns a list of the exposures
+        # Exposures for account
+        print('Exposures for account:')
         api_response = await api_instance.exposures_for_account(account_id)
         pprint(api_response)
-    except ApiException as e:
-        print(f"Exception when calling GeneralApi->exposures: {e}\n")
 
-    try:
-        # Returns a list of the exposures
+        # Exposures (all)
+        print('Exposures (all):')
         api_response = await api_instance.exposures()
         pprint(api_response)
-    except ApiException as e:
-        print(f"Exception when calling GeneralApi->exposures: {e}\n")
 
-    try:
-        # Returns list of available instruments
+        # Instruments
+        print('Instruments:')
         api_response = await api_instance.instruments(site, exchange)
         pprint(api_response)
-    except ApiException as e:
-        print(f"Exception when calling GeneralApi->instruments: {e}\n")
 
-    try:
-        # Returns user limits
+        # Limits
+        print('Limits:')
         api_response = await api_instance.limits(site, exchange, account_id)
         pprint(api_response)
+
     except ApiException as e:
-        print(f"Exception when calling GeneralApi->limits: {e}\n")
+        print(f"API Exception: {e}")
+        raise e
+
     finally:
         # Explicitly close the session
         await api_instance.api_client.rest_client.pool_manager.close()
@@ -141,96 +145,156 @@ if __name__ == '__main__':
 
 ### How to TWAP
 ```python
-import asyncio
-import datetime
-
 import http_nt_pclient
 from http_nt_pclient.rest import ApiException
+import asyncio
+import datetime
 from pprint import pprint
 
 
 async def main():
-    api_instance = http_nt_pclient.TWAPApi()
-    api_instance.api_client.configuration.username = 'API_KEY'
-    api_instance.api_client.configuration.password = 'API_SECRET'
-    api_instance.api_client.configuration.host = 'TRADER_URL'
-
-    site = 'Ext-Tokyo-1'  # str | Instance of Nickel Trader used for the execution. One or more can be available. For the list of available sites, query [/v1/sites](#/General/sites).
-    account_id = 'account_id_example'  # str | An exchange account id
-    exchange = 'BINANCE_FUTURES_USDT'  # str | Exchange, see [/v1/exchanges](#/General/exchanges)
-
-    try:
-        api_response = await api_instance.twap_strategies()
-        pprint(api_response)
-    except ApiException as e:
-        print(f"Exception when calling TwapApi->twap_strategies: {e}\n")
-
-    params = http_nt_pclient.TwapParameters(
-        instrument=exchange,
-        account=account_id,
-        side='BUY',
-        target=0.1,
-        guaranteed_execution='NO',
-        scheduled_start_time=datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(minutes=60),
-        aggression_cap=1,
-        aggression_floor=0,
-        step_size=0.01,
-        step_time=1
-    )
-
-    try:
-        api_response = await api_instance.create(params, site, 'excID')
-        pprint(api_response)
-    except ApiException as e:
-        print(f"Exception when calling TwapApi->create: {e}\n")
-
-    update_params = http_nt_pclient.TwapUpdateParameters(
-        limit_price=10000,
-    )
+    """
+    Complete example demonstrating TWAP strategy lifecycle management.
+    
+    This example shows how to:
+    - Configure API clients with shared credentials
+    - Query existing strategies
+    - Create, update, and delete single strategies
+    - Create, update, and delete multiple strategies in batch
+    - Properly manage async session cleanup
+    """
+    # Configuration
+    api_config = {
+        'username': 'API_KEY',
+        'password': 'API_SECRET',
+        'host': 'TRADER_URL'
+    }
+    
+    # Initialize API instances with shared configuration
+    twap_api_instance = http_nt_pclient.TWAPApi()
+    strategy_api_instance = http_nt_pclient.StrategyApi()
+    
+    # Apply configuration to both instances
+    for api_instance in [twap_api_instance, strategy_api_instance]:
+        api_instance.api_client.configuration.username = api_config['username']
+        api_instance.api_client.configuration.password = api_config['password']
+        api_instance.api_client.configuration.host = api_config['host']
+    
+    # Trading parameters
+    site = 'SITE_NAME'  # Instance of Nickel Trader used for execution
+    instrument = 'INSTRUMENT_NAME'  # Trading instrument (e.g. 'BTCUSDT@BINANCE_FUTURES_USDT')
+    account_id = 'ACCOUNT_ID'  # Exchange account identifier in Nickel Trader
 
     try:
-        api_response = await api_instance.update(update_params, site, 'excID')
+        # Query existing TWAP strategies
+        api_response = await twap_api_instance.twap_strategies()
+        print("Existing TWAP strategies:")
         pprint(api_response)
-    except ApiException as e:
-        print(f"Exception when calling TwapApi->update: {e}\n")
-
-    multi_params = http_nt_pclient.MultipleTwapParameters(twaps=[
-        http_nt_pclient.TwapParametersWithId(
-            execution_id='excID2',
-            parameters=http_nt_pclient.TwapParameters(
-                instrument=exchange,
-                account=account_id,
-                side='SELL',
-                target=0.1,
-                guaranteed_execution='NO',
-                scheduled_start_time=datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(minutes=60),
-                aggression_cap=1,
-                aggression_floor=0,
-                step_size=0.01,
-                step_time=1
-            ))
-    ])
-
-    try:
-        api_response = await api_instance.create_multi(multi_params, site)
-        pprint(api_response)
-    except ApiException as e:
-        print(f"Exception when calling TwapApi->create: {e}\n")
-
-    multi_update = http_nt_pclient.MultipleTwapUpdateParameters(updates=[
-        http_nt_pclient.TwapUpdateParametersWithId(
-            execution_id='excID2',
-            parameters_to_update=[
-                http_nt_pclient.TwapUpdateParameters(limit_price=100000)
-            ]
+        
+        # === SINGLE STRATEGY LIFECYCLE ===
+        
+        # Create a single TWAP strategy
+        params = http_nt_pclient.TwapParameters(
+            instrument=instrument,
+            account=account_id,
+            side='BUY',
+            target=0.1,
+            guaranteed_execution='NO',
+            scheduled_start_time=datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(minutes=60),
+            aggression_cap=0.3,
+            aggression_floor=0.5,
+            step_size=0.01,
+            step_time=1
         )
-    ])
 
-    try:
-        api_response = await api_instance.update_multi(multi_update, site)
+        api_response = await twap_api_instance.create(params, site, 'excID1')
+        print("Created single TWAP strategy:")
         pprint(api_response)
+
+        # Update the strategy
+        update_params = http_nt_pclient.TwapUpdateParameters(
+            limit_price=10000,
+        )
+
+        api_response = await twap_api_instance.update(update_params, site, 'excID1')
+        print("Updated single TWAP strategy:")
+        pprint(api_response)
+
+        # Delete the strategy
+        api_response = await strategy_api_instance.delete(site, 'excID1')
+        print("Deleted single TWAP strategy:")
+        pprint(api_response)
+
+        # === MULTIPLE STRATEGIES LIFECYCLE ===
+        
+        # Create multiple strategies in a single request
+        multi_params = http_nt_pclient.MultipleTwapParameters(twaps=[
+            http_nt_pclient.TwapParametersWithId(
+                execution_id='excID2',  # Must be unique across all strategies
+                parameters=http_nt_pclient.TwapParameters(
+                    instrument=instrument,
+                    account=account_id,
+                    side='SELL',
+                    target=0.1,
+                    guaranteed_execution='YES',
+                    scheduled_start_time=datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(minutes=60),
+                    aggression_cap=0.9,
+                    aggression_floor=0.95,
+                    step_size=0.01,
+                    step_time=1
+                )
+            ),
+            http_nt_pclient.TwapParametersWithId(
+                execution_id='excID3',  # Must be unique across all strategies
+                parameters=http_nt_pclient.TwapParameters(
+                    instrument=instrument,
+                    account=account_id,
+                    side='BUY',
+                    target=0.1,
+                    guaranteed_execution='NO',
+                    scheduled_start_time=datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(minutes=60),
+                    aggression_cap=0.3,
+                    aggression_floor=0.5,
+                    step_size=0.01,
+                    step_time=1
+                )
+            )
+        ])
+
+        api_response = await twap_api_instance.create_multi(multi_params, site)
+        print("Created multiple TWAP strategies:")
+        pprint(api_response)
+
+        # Update multiple strategies
+        multi_update = http_nt_pclient.MultipleTwapUpdateParameters(updates=[
+            http_nt_pclient.TwapUpdateParametersWithId(
+                execution_id='excID2',
+                parameters_to_update=http_nt_pclient.TwapUpdateParameters(limit_price=100000)
+            ),
+            http_nt_pclient.TwapUpdateParametersWithId(
+                execution_id='excID3',
+                parameters_to_update=http_nt_pclient.TwapUpdateParameters(target=0.5)
+            )
+        ])
+
+        api_response = await twap_api_instance.update_multi(multi_update, site)
+        print("Updated multiple TWAP strategies:")
+        pprint(api_response)
+
+        # Delete multiple strategies
+        delete_ids = http_nt_pclient.ExecutionIds(execution_ids=['excID2', 'excID3'])
+        api_response = await strategy_api_instance.delete_multi(delete_ids, site)
+        print("Deleted multiple TWAP strategies:")
+        pprint(api_response)
+
     except ApiException as e:
-        print(f"Exception when calling TwapApi->update_multi: {e}\n")
+        print(f"API Exception: {e}")
+        raise e
+
+    finally:
+        # CRITICAL: Always close API client sessions to prevent resource leaks
+        await twap_api_instance.api_client.rest_client.pool_manager.close()
+        await strategy_api_instance.api_client.rest_client.pool_manager.close()
 
 
 if __name__ == '__main__':
@@ -298,4 +362,5 @@ Class | Method | HTTP request | Description
  - [TwapUpdateParameters](docs/TwapUpdateParameters.md)
  - [TwapUpdateParametersWithId](docs/TwapUpdateParametersWithId.md)
  - [TwapWithStatistics](docs/TwapWithStatistics.md)
+
 
