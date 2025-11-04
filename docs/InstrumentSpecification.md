@@ -21,8 +21,6 @@ Name | Type | Description | Notes
 **option_type** | **str** |  | [optional] 
 **order_price_precision** | **float** |  | [optional] 
 **order_size_precision** | **float** |  | [optional] 
-**product_family_id** | **str** |  | [optional] 
-**product_id** | **str** |  | [optional] 
 **settlement_currency_id** | **str** |  | [optional] 
 **short_instrument_id** | **str** |  | [optional] 
 **strike** | **float** |  | [optional] 

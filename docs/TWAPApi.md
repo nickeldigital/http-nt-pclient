@@ -4,20 +4,20 @@ All URIs are relative to *NT_URL*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create**](TWAPApi.md#create) | **POST** /v1/strategy/twap/{site}/{executionId} | Create twap strategy instance
-[**create_multi**](TWAPApi.md#create_multi) | **POST** /v1/strategy/twap/{site} | Create multiple twap strategies
-[**replace**](TWAPApi.md#replace) | **PUT** /v1/strategy/twap/{site}/{executionId} | Replace twap strategy instance
-[**replace_multi**](TWAPApi.md#replace_multi) | **PUT** /v1/strategy/twap/{site} | Replace multiple twap strategies
-[**twap_strategies**](TWAPApi.md#twap_strategies) | **GET** /v1/strategy/twap | Returns list of user strategies
-[**twap_strategies_for_site**](TWAPApi.md#twap_strategies_for_site) | **GET** /v1/strategy/twap/{site} | Returns list of user strategies
-[**twap_strategy**](TWAPApi.md#twap_strategy) | **GET** /v1/strategy/twap/{site}/{executionId} | Return TWAP strategy
-[**update**](TWAPApi.md#update) | **PATCH** /v1/strategy/twap/{site}/{executionId} | Update existing TWAP strategy parameters. Updates only fields provided in request body
-[**update_multi**](TWAPApi.md#update_multi) | **PATCH** /v1/strategy/twap/{site} | Update existing multiple TWAP strategy parameters. Updates only fields provided in request body
+[**create**](TWAPApi.md#create) | **POST** /v1/strategy/twap/{site}/{executionId} | Create TWAP strategy instance {executionId} for {site}.
+[**create_multi**](TWAPApi.md#create_multi) | **POST** /v1/strategy/twap/{site} | Create multiple TWAP strategies for {site}.
+[**replace**](TWAPApi.md#replace) | **PUT** /v1/strategy/twap/{site}/{executionId} | Replace TWAP strategy instance {executionId} for {site}.
+[**replace_multi**](TWAPApi.md#replace_multi) | **PUT** /v1/strategy/twap/{site} | Replace multiple TWAP strategies for {site}.
+[**twap_strategies**](TWAPApi.md#twap_strategies) | **GET** /v1/strategy/twap | List TWAP strategies.
+[**twap_strategies_for_site**](TWAPApi.md#twap_strategies_for_site) | **GET** /v1/strategy/twap/{site} | List TWAP strategies for {site}.
+[**twap_strategy**](TWAPApi.md#twap_strategy) | **GET** /v1/strategy/twap/{site}/{executionId} | Retrieve TWAP strategy {executionId} for {site}.
+[**update**](TWAPApi.md#update) | **PATCH** /v1/strategy/twap/{site}/{executionId} | Update TWAP strategy {executionId}; only fields present in the request body are modified.
+[**update_multi**](TWAPApi.md#update_multi) | **PATCH** /v1/strategy/twap/{site} | Update multiple TWAP strategies for {site}; only fields present in the request body are modified.
 
 # **create**
 > Twap create(body, site, execution_id)
 
-Create twap strategy instance
+Create TWAP strategy instance {executionId} for {site}.
 
 ### Example
 ```python
@@ -36,7 +36,7 @@ async def main():
     site = 'site_example' # str | Instance of Nickel Trader used for the execution. One or more can be available. For the list of available sites, query [/v1/sites](#/General/sites). 
     execution_id = 'execution_id_example' # str | A user-generated unique identifier for the strategy, restricted to a maximum of 8 alphanumerical characters. If an existing identifier is provided, the request will be unsuccessful. 
     try:
-        # Create twap strategy instance
+        # Create TWAP strategy instance {executionId} for {site}.
         api_response = await api_instance.create(body, site, execution_id)
         pprint(api_response)
     except ApiException as e:
@@ -75,7 +75,7 @@ Name | Type | Description  | Notes
 # **create_multi**
 > TwapCreateControllerResponse create_multi(body, site)
 
-Create multiple twap strategies
+Create multiple TWAP strategies for {site}.
 
 ### Example
 ```python
@@ -93,7 +93,7 @@ async def main():
     body = http_nt_pclient.MultipleTwapParameters() # MultipleTwapParameters | 
     site = 'site_example' # str | Instance of Nickel Trader used for the execution. One or more can be available. For the list of available sites, query [/v1/sites](#/General/sites). 
     try:
-        # Create multiple twap strategies
+        # Create multiple TWAP strategies for {site}.
         api_response = await api_instance.create_multi(body, site)
         pprint(api_response)
     except ApiException as e:
@@ -131,7 +131,7 @@ Name | Type | Description  | Notes
 # **replace**
 > TwapReplaceResponse replace(body, site, execution_id)
 
-Replace twap strategy instance
+Replace TWAP strategy instance {executionId} for {site}.
 
 ### Example
 ```python
@@ -150,7 +150,7 @@ async def main():
     site = 'site_example' # str | Instance of Nickel Trader used for the execution. One or more can be available. For the list of available sites, query [/v1/sites](#/General/sites). 
     execution_id = 'execution_id_example' # str | A user-generated unique identifier for the strategy, restricted to a maximum of 8 alphanumerical characters. If an existing identifier is provided, the current strategy request will overwrite the previously stored strategy. Conversely, if the provided identifier is not found, the request will be unsuccessful. 
     try:
-        # Replace twap strategy instance
+        # Replace TWAP strategy instance {executionId} for {site}.
         api_response = await api_instance.replace(body, site, execution_id)
         pprint(api_response)
     except ApiException as e:
@@ -189,7 +189,7 @@ Name | Type | Description  | Notes
 # **replace_multi**
 > TwapReplaceControllerResponse replace_multi(body, site)
 
-Replace multiple twap strategies
+Replace multiple TWAP strategies for {site}.
 
 ### Example
 ```python
@@ -207,7 +207,7 @@ async def main():
     body = http_nt_pclient.MultipleTwapParameters() # MultipleTwapParameters | 
     site = 'site_example' # str | Instance of Nickel Trader used for the execution. One or more can be available. For the list of available sites, query [/v1/sites](#/General/sites). 
     try:
-        # Replace multiple twap strategies
+        # Replace multiple TWAP strategies for {site}.
         api_response = await api_instance.replace_multi(body, site)
         pprint(api_response)
     except ApiException as e:
@@ -245,7 +245,7 @@ Name | Type | Description  | Notes
 # **twap_strategies**
 > list[TwapWithStatistics] twap_strategies()
 
-Returns list of user strategies
+List TWAP strategies.
 
 ### Example
 ```python
@@ -261,7 +261,7 @@ async def main():
     api_instance.api_client.configuration.password = 'API_SECRET'
     api_instance.api_client.configuration.host = 'NT_URL'
     try:
-        # Returns list of user strategies
+        # List TWAP strategies.
         api_response = await api_instance.twap_strategies()
         pprint(api_response)
     except ApiException as e:
@@ -295,7 +295,7 @@ This endpoint does not need any parameter.
 # **twap_strategies_for_site**
 > list[TwapWithStatistics] twap_strategies_for_site(site)
 
-Returns list of user strategies
+List TWAP strategies for {site}.
 
 ### Example
 ```python
@@ -312,7 +312,7 @@ async def main():
     api_instance.api_client.configuration.host = 'NT_URL'
     site = 'site_example' # str | Instance of Nickel Trader used for the execution. One or more can be available. For the list of available sites, query [/v1/sites](#/General/sites). 
     try:
-        # Returns list of user strategies
+        # List TWAP strategies for {site}.
         api_response = await api_instance.twap_strategies_for_site(site)
         pprint(api_response)
     except ApiException as e:
@@ -349,7 +349,7 @@ Name | Type | Description  | Notes
 # **twap_strategy**
 > TwapWithStatistics twap_strategy(site, execution_id)
 
-Return TWAP strategy
+Retrieve TWAP strategy {executionId} for {site}.
 
 ### Example
 ```python
@@ -367,7 +367,7 @@ async def main():
     site = 'site_example' # str | Instance of Nickel Trader used for the execution. One or more can be available. For the list of available sites, query [/v1/sites](#/General/sites). 
     execution_id = 'execution_id_example' # str | A user-generated unique identifier for the strategy, restricted to a maximum of 8 alphanumerical characters.
     try:
-        # Return TWAP strategy
+        # Retrieve TWAP strategy {executionId} for {site}.
         api_response = await api_instance.twap_strategy(site, execution_id)
         pprint(api_response)
     except ApiException as e:
@@ -405,7 +405,7 @@ Name | Type | Description  | Notes
 # **update**
 > TwapWithStatistics update(body, site, execution_id)
 
-Update existing TWAP strategy parameters. Updates only fields provided in request body
+Update TWAP strategy {executionId}; only fields present in the request body are modified.
 
 ### Example
 ```python
@@ -424,7 +424,7 @@ async def main():
     site = 'site_example' # str | Instance of Nickel Trader used for the execution. One or more can be available. For the list of available sites, query [/v1/sites](#/General/sites). 
     execution_id = 'execution_id_example' # str | A user-generated unique identifier for the strategy, restricted to a maximum of 8 alphanumerical characters.
     try:
-        # Update existing TWAP strategy parameters. Updates only fields provided in request body
+        # Update TWAP strategy {executionId}; only fields present in the request body are modified.
         api_response = await api_instance.update(body, site, execution_id)
         pprint(api_response)
     except ApiException as e:
@@ -463,7 +463,7 @@ Name | Type | Description  | Notes
 # **update_multi**
 > TwapUpdateControllerResponse update_multi(body, site)
 
-Update existing multiple TWAP strategy parameters. Updates only fields provided in request body
+Update multiple TWAP strategies for {site}; only fields present in the request body are modified.
 
 ### Example
 ```python
@@ -481,7 +481,7 @@ async def main():
     body = http_nt_pclient.MultipleTwapUpdateParameters() # MultipleTwapUpdateParameters | 
     site = 'site_example' # str | Instance of Nickel Trader used for the execution. One or more can be available. For the list of available sites, query [/v1/sites](#/General/sites). 
     try:
-        # Update existing multiple TWAP strategy parameters. Updates only fields provided in request body
+        # Update multiple TWAP strategies for {site}; only fields present in the request body are modified.
         api_response = await api_instance.update_multi(body, site)
         pprint(api_response)
     except ApiException as e:

@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 **scheduled_stop_time** | **datetime** | TWAP will stop automatically at given stop time. Only settable for an existing strategy in state NEW or STOPPED. | [optional] 
 **side** | **str** | Side to trade: can be buy or sell. Required when specifying a target, but overridden if using targetPosition. Only settable for an existing strategy when in state NEW or STOPPED. | 
 **start** | **bool** | Start strategy execution immediately after submit. | [optional] [default to False]
-**step_size** | **float** | The average increment of each step of TWAP execution (subject to randomisation). Only settable for an existing strategy in state NEW or STOPPED. | 
+**step_size** | **float** | The average increment of each step of TWAP execution (subject to randomisation). Only settable for an existing strategy in state NEW or STOPPED. | [optional] 
 **step_time** | **int** | The average time delay in seconds between each step of TWAP execution. Required if no scheduledStartTime is provided. Only settable for an existing strategy in state NEW or STOPPED. | [optional] 
 **target** | **float** | Full quantity of the base asset to trade. The strategy will stop when target is reached. Only settable for an existing strategy in state NEW or STOPPED. Cannot be set together with targetPosition. | [optional] 
 **target_position** | **float** | Signed position size following successful execution of the trading algorithm. Only settable for an existing strategy in state NEW or STOPPED. Cannot be set together with target. | [optional] 
