@@ -50,7 +50,7 @@ Each API response contains `X-Rate-Limit-Remaining` header allowing users to pla
 - The blue line on the graphs above indicates the non-stochastic target (which, in turn, would result in constant order size for each iteration). In reality, the TWAP algorithm randomises both the order size and the time between orders, doing so in a way that keeps the execution probabilistically very close to the blue line, but making it hard for market-makers to detect and widen their quotes.
 
 - API version: 1.0.0
-- Package version: 1.0.0
+- Package version: 1.0.4
 - Build package: io.swagger.codegen.v3.generators.python.PythonClientCodegen
 
 ## Requirements.
@@ -116,14 +116,24 @@ async def main():
         api_response = await api_instance.exposures_for_account(account_id)
         pprint(api_response)
 
-        # Exposures (all)
-        print('Exposures (all):')
-        api_response = await api_instance.exposures()
-        pprint(api_response)
-
         # Instruments
         print('Instruments:')
         api_response = await api_instance.instruments(site, exchange)
+        pprint(api_response)
+
+        # Positions
+        print('Positions:')
+        api_response = await api_instance.positions()
+        pprint(api_response)
+
+        # Exposures
+        print('Exposures:')
+        api_response = await api_instance.exposures()
+        pprint(api_response)
+
+        # Fills
+        print('Fills:')
+        api_response = await api_instance.fills()
         pprint(api_response)
 
         # Limits
@@ -307,27 +317,30 @@ All URIs are relative to *NT_URL*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*GeneralApi* | [**exchanges**](docs/GeneralApi.md#exchanges) | **GET** /v1/exchanges/{site} | Returns list of available exchanges
-*GeneralApi* | [**exposures**](docs/GeneralApi.md#exposures) | **GET** /v1/exposures | Returns a list of the exposures
-*GeneralApi* | [**exposures_for_account**](docs/GeneralApi.md#exposures_for_account) | **GET** /v1/exposures/{accountId} | Returns a list of the exposures
-*GeneralApi* | [**instruments**](docs/GeneralApi.md#instruments) | **GET** /v1/instruments/{site}/{exchange} | Returns list of available instruments
-*GeneralApi* | [**limits**](docs/GeneralApi.md#limits) | **GET** /v1/limits/{site}/{exchange}/{accountId} | Returns user limits
-*GeneralApi* | [**sites**](docs/GeneralApi.md#sites) | **GET** /v1/sites | Returns list of available Nickel Trader instances (sites)
-*StrategyApi* | [**change_state**](docs/StrategyApi.md#change_state) | **POST** /v1/strategy/{site}/{executionId} | start/stop/pause/resume strategy
-*StrategyApi* | [**change_state_multi**](docs/StrategyApi.md#change_state_multi) | **POST** /v1/strategy/{site} | start/stop/pause/resume multiple strategies
-*StrategyApi* | [**delete**](docs/StrategyApi.md#delete) | **DELETE** /v1/strategy/{site}/{executionId} | Delete strategy
-*StrategyApi* | [**delete_multi**](docs/StrategyApi.md#delete_multi) | **DELETE** /v1/strategy/{site} | Delete strategies
-*StrategyApi* | [**strategies**](docs/StrategyApi.md#strategies) | **GET** /v1/strategy/{site} | Returns list of user strategies
-*StrategyApi* | [**strategy**](docs/StrategyApi.md#strategy) | **GET** /v1/strategy/{site}/{executionId} | Returns strategy
-*TWAPApi* | [**create**](docs/TWAPApi.md#create) | **POST** /v1/strategy/twap/{site}/{executionId} | Create twap strategy instance
-*TWAPApi* | [**create_multi**](docs/TWAPApi.md#create_multi) | **POST** /v1/strategy/twap/{site} | Create multiple twap strategies
-*TWAPApi* | [**replace**](docs/TWAPApi.md#replace) | **PUT** /v1/strategy/twap/{site}/{executionId} | Replace twap strategy instance
-*TWAPApi* | [**replace_multi**](docs/TWAPApi.md#replace_multi) | **PUT** /v1/strategy/twap/{site} | Replace multiple twap strategies
-*TWAPApi* | [**twap_strategies**](docs/TWAPApi.md#twap_strategies) | **GET** /v1/strategy/twap | Returns list of user strategies
-*TWAPApi* | [**twap_strategies_for_site**](docs/TWAPApi.md#twap_strategies_for_site) | **GET** /v1/strategy/twap/{site} | Returns list of user strategies
-*TWAPApi* | [**twap_strategy**](docs/TWAPApi.md#twap_strategy) | **GET** /v1/strategy/twap/{site}/{executionId} | Return TWAP strategy
-*TWAPApi* | [**update**](docs/TWAPApi.md#update) | **PATCH** /v1/strategy/twap/{site}/{executionId} | Update existing TWAP strategy parameters. Updates only fields provided in request body
-*TWAPApi* | [**update_multi**](docs/TWAPApi.md#update_multi) | **PATCH** /v1/strategy/twap/{site} | Update existing multiple TWAP strategy parameters. Updates only fields provided in request body
+*GeneralApi* | [**exchanges**](docs/GeneralApi.md#exchanges) | **GET** /v1/exchanges/{site} | List exchanges for {site}.
+*GeneralApi* | [**exposures**](docs/GeneralApi.md#exposures) | **GET** /v1/exposures | List exposures.
+*GeneralApi* | [**exposures_for_account**](docs/GeneralApi.md#exposures_for_account) | **GET** /v1/exposures/{accountId} | List exposures for {accountId}.
+*GeneralApi* | [**fills**](docs/GeneralApi.md#fills) | **GET** /v1/fills | List fills.
+*GeneralApi* | [**instruments**](docs/GeneralApi.md#instruments) | **GET** /v1/instruments/{site}/{exchange} | List instruments for {site} and {exchange}.
+*GeneralApi* | [**limits**](docs/GeneralApi.md#limits) | **GET** /v1/limits/{site}/{exchange}/{accountId} | Retrieve account limits for {accountId} on {site} and {exchange}.
+*GeneralApi* | [**positions**](docs/GeneralApi.md#positions) | **GET** /v1/positions | List positions.
+*GeneralApi* | [**positions_for_account**](docs/GeneralApi.md#positions_for_account) | **GET** /v1/positions/{accountId} | List positions for {accountId}.
+*GeneralApi* | [**sites**](docs/GeneralApi.md#sites) | **GET** /v1/sites | List available Nickel Trader sites.
+*StrategyApi* | [**change_state**](docs/StrategyApi.md#change_state) | **POST** /v1/strategy/{site}/{executionId} | Start, stop, pause, or resume strategy {executionId} for {site}.
+*StrategyApi* | [**change_state_multi**](docs/StrategyApi.md#change_state_multi) | **POST** /v1/strategy/{site} | Start, stop, pause, or resume multiple strategies for {site}.
+*StrategyApi* | [**delete**](docs/StrategyApi.md#delete) | **DELETE** /v1/strategy/{site}/{executionId} | Delete strategy {executionId} for {site}.
+*StrategyApi* | [**delete_multi**](docs/StrategyApi.md#delete_multi) | **DELETE** /v1/strategy/{site} | Delete strategies for {site}.
+*StrategyApi* | [**strategies**](docs/StrategyApi.md#strategies) | **GET** /v1/strategy/{site} | List strategies for {site}.
+*StrategyApi* | [**strategy**](docs/StrategyApi.md#strategy) | **GET** /v1/strategy/{site}/{executionId} | Retrieve strategy {executionId} for {site}.
+*TWAPApi* | [**create**](docs/TWAPApi.md#create) | **POST** /v1/strategy/twap/{site}/{executionId} | Create TWAP strategy instance {executionId} for {site}.
+*TWAPApi* | [**create_multi**](docs/TWAPApi.md#create_multi) | **POST** /v1/strategy/twap/{site} | Create multiple TWAP strategies for {site}.
+*TWAPApi* | [**replace**](docs/TWAPApi.md#replace) | **PUT** /v1/strategy/twap/{site}/{executionId} | Replace TWAP strategy instance {executionId} for {site}.
+*TWAPApi* | [**replace_multi**](docs/TWAPApi.md#replace_multi) | **PUT** /v1/strategy/twap/{site} | Replace multiple TWAP strategies for {site}.
+*TWAPApi* | [**twap_strategies**](docs/TWAPApi.md#twap_strategies) | **GET** /v1/strategy/twap | List TWAP strategies.
+*TWAPApi* | [**twap_strategies_for_site**](docs/TWAPApi.md#twap_strategies_for_site) | **GET** /v1/strategy/twap/{site} | List TWAP strategies for {site}.
+*TWAPApi* | [**twap_strategy**](docs/TWAPApi.md#twap_strategy) | **GET** /v1/strategy/twap/{site}/{executionId} | Retrieve TWAP strategy {executionId} for {site}.
+*TWAPApi* | [**update**](docs/TWAPApi.md#update) | **PATCH** /v1/strategy/twap/{site}/{executionId} | Update TWAP strategy {executionId}; only fields present in the request body are modified.
+*TWAPApi* | [**update_multi**](docs/TWAPApi.md#update_multi) | **PATCH** /v1/strategy/twap/{site} | Update multiple TWAP strategies for {site}; only fields present in the request body are modified.
 
 ## Documentation For Models
 
@@ -343,11 +356,13 @@ Class | Method | HTTP request | Description
  - [MultipleStrategiesActionRequest](docs/MultipleStrategiesActionRequest.md)
  - [MultipleTwapParameters](docs/MultipleTwapParameters.md)
  - [MultipleTwapUpdateParameters](docs/MultipleTwapUpdateParameters.md)
+ - [PositionDTOV2](docs/PositionDTOV2.md)
  - [RequestedAction](docs/RequestedAction.md)
  - [Response](docs/Response.md)
  - [Sites](docs/Sites.md)
  - [Strategies](docs/Strategies.md)
  - [StrategyState](docs/StrategyState.md)
+ - [Trade](docs/Trade.md)
  - [Twap](docs/Twap.md)
  - [TwapCreateControllerResponse](docs/TwapCreateControllerResponse.md)
  - [TwapParameters](docs/TwapParameters.md)
@@ -362,5 +377,4 @@ Class | Method | HTTP request | Description
  - [TwapUpdateParameters](docs/TwapUpdateParameters.md)
  - [TwapUpdateParametersWithId](docs/TwapUpdateParametersWithId.md)
  - [TwapWithStatistics](docs/TwapWithStatistics.md)
-
 
