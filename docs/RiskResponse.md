@@ -1,9 +1,10 @@
-# MultipleTwapUpdateParameters
+# RiskResponse
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**updates** | [**list[TwapUpdateParametersWithId]**](TwapUpdateParametersWithId.md) |  | 
+**risk** | [**list[Risk]**](Risk.md) |  | [optional] 
+**timestamp** | **int** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

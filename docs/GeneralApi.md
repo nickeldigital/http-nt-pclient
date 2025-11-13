@@ -12,6 +12,7 @@ Method | HTTP request | Description
 [**limits**](GeneralApi.md#limits) | **GET** /v1/limits/{site}/{exchange}/{accountId} | Retrieve account limits for {accountId} on {site} and {exchange}.
 [**positions**](GeneralApi.md#positions) | **GET** /v1/positions | List positions.
 [**positions_for_account**](GeneralApi.md#positions_for_account) | **GET** /v1/positions/{accountId} | List positions for {accountId}.
+[**risk**](GeneralApi.md#risk) | **GET** /v1/risk | Retrieve risk metrics.
 [**sites**](GeneralApi.md#sites) | **GET** /v1/sites | List available Nickel Trader sites.
 
 # **exchanges**
@@ -428,6 +429,56 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**list[PositionDTOV2]**](PositionDTOV2.md)
+
+### Authorization
+
+[basicAuth](../README.md#basicAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **risk**
+> RiskResponse risk()
+
+Retrieve risk metrics.
+
+### Example
+```python
+import asyncio
+import http_nt_pclient
+from http_nt_pclient.rest import ApiException
+from pprint import pprint
+
+async def main():
+    # Configure HTTP basic authorization: basicAuth
+    api_instance = http_nt_pclient.GeneralApi()
+    api_instance.api_client.configuration.username = 'API_KEY'
+    api_instance.api_client.configuration.password = 'API_SECRET'
+    api_instance.api_client.configuration.host = 'NT_URL'
+    try:
+        # Retrieve risk metrics.
+        api_response = await api_instance.risk()
+        pprint(api_response)
+    except ApiException as e:
+        print(f"Exception when calling GeneralApi->risk: {e}\n")
+    finally:
+        # Explicitly close the session
+        await api_instance.api_client.rest_client.pool_manager.close()
+
+if __name__ == '__main__':
+    asyncio.run(main())
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**RiskResponse**](RiskResponse.md)
 
 ### Authorization
 
