@@ -49,8 +49,8 @@ Each API response contains `X-Rate-Limit-Remaining` header allowing users to pla
 # Randomisation [always-on]
 - The blue line on the graphs above indicates the non-stochastic target (which, in turn, would result in constant order size for each iteration). In reality, the TWAP algorithm randomises both the order size and the time between orders, doing so in a way that keeps the execution probabilistically very close to the blue line, but making it hard for market-makers to detect and widen their quotes.
 
-- API version: 1.0.0
-- Package version: 1.0.4
+- API version: 1.1.0
+- Package version: 1.1.0
 - Build package: io.swagger.codegen.v3.generators.python.PythonClientCodegen
 
 ## Requirements.
@@ -111,11 +111,6 @@ async def main():
         api_response = await api_instance.exchanges(site)
         pprint(api_response)
 
-        # Exposures for account
-        print('Exposures for account:')
-        api_response = await api_instance.exposures_for_account(account_id)
-        pprint(api_response)
-
         # Instruments
         print('Instruments:')
         api_response = await api_instance.instruments(site, exchange)
@@ -139,6 +134,11 @@ async def main():
         # Limits
         print('Limits:')
         api_response = await api_instance.limits(site, exchange, account_id)
+        pprint(api_response)
+
+        # Risk
+        print('Risk:')
+        api_response = await api_instance.risk()
         pprint(api_response)
 
     except ApiException as e:
@@ -325,6 +325,7 @@ Class | Method | HTTP request | Description
 *GeneralApi* | [**limits**](docs/GeneralApi.md#limits) | **GET** /v1/limits/{site}/{exchange}/{accountId} | Retrieve account limits for {accountId} on {site} and {exchange}.
 *GeneralApi* | [**positions**](docs/GeneralApi.md#positions) | **GET** /v1/positions | List positions.
 *GeneralApi* | [**positions_for_account**](docs/GeneralApi.md#positions_for_account) | **GET** /v1/positions/{accountId} | List positions for {accountId}.
+*GeneralApi* | [**risk**](docs/GeneralApi.md#risk) | **GET** /v1/risk | Retrieve risk metrics.
 *GeneralApi* | [**sites**](docs/GeneralApi.md#sites) | **GET** /v1/sites | List available Nickel Trader sites.
 *StrategyApi* | [**change_state**](docs/StrategyApi.md#change_state) | **POST** /v1/strategy/{site}/{executionId} | Start, stop, pause, or resume strategy {executionId} for {site}.
 *StrategyApi* | [**change_state_multi**](docs/StrategyApi.md#change_state_multi) | **POST** /v1/strategy/{site} | Start, stop, pause, or resume multiple strategies for {site}.
@@ -344,6 +345,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [Account](docs/Account.md)
  - [ApiError](docs/ApiError.md)
  - [ExecutionId](docs/ExecutionId.md)
  - [ExecutionIds](docs/ExecutionIds.md)
@@ -353,12 +355,15 @@ Class | Method | HTTP request | Description
  - [Issue](docs/Issue.md)
  - [LimitBreachedInfo](docs/LimitBreachedInfo.md)
  - [LimitResponse](docs/LimitResponse.md)
+ - [Metrics](docs/Metrics.md)
  - [MultipleStrategiesActionRequest](docs/MultipleStrategiesActionRequest.md)
  - [MultipleTwapParameters](docs/MultipleTwapParameters.md)
  - [MultipleTwapUpdateParameters](docs/MultipleTwapUpdateParameters.md)
  - [PositionDTOV2](docs/PositionDTOV2.md)
  - [RequestedAction](docs/RequestedAction.md)
  - [Response](docs/Response.md)
+ - [Risk](docs/Risk.md)
+ - [RiskResponse](docs/RiskResponse.md)
  - [Sites](docs/Sites.md)
  - [Strategies](docs/Strategies.md)
  - [StrategyState](docs/StrategyState.md)
