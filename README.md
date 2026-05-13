@@ -211,8 +211,8 @@ async def main():
             target=0.1,
             guaranteed_execution='NO',
             scheduled_start_time=datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(minutes=60),
-            aggression_cap=0.3,
-            aggression_floor=0.5,
+            aggression_cap=30,
+            aggression_floor=50,
             step_size=0.01,
             step_time=1
         )
@@ -248,8 +248,8 @@ async def main():
                     target=0.1,
                     guaranteed_execution='YES',
                     scheduled_start_time=datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(minutes=60),
-                    aggression_cap=0.9,
-                    aggression_floor=0.95,
+                    aggression_cap=90,
+                    aggression_floor=95,
                     step_size=0.01,
                     step_time=1
                 )
@@ -263,8 +263,8 @@ async def main():
                     target=0.1,
                     guaranteed_execution='NO',
                     scheduled_start_time=datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(minutes=60),
-                    aggression_cap=0.3,
-                    aggression_floor=0.5,
+                    aggression_cap=30,
+                    aggression_floor=50,
                     step_size=0.01,
                     step_time=1
                 )
